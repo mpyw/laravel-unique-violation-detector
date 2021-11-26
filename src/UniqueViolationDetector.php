@@ -17,7 +17,7 @@ class UniqueViolationDetector implements Contracts\UniqueViolationDetector
 
     public function __construct(ConnectionInterface $connection)
     {
-        $this->detector = (new UniqueViolationDetectorDiscoverer())->discover($connection);
+        $this->detector = (new DetectorDiscoverer())->discover($connection);
     }
 
     public function violated(PDOException $e): bool

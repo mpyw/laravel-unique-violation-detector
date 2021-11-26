@@ -16,7 +16,7 @@ use Mpyw\UniqueViolationDetector\SQLiteDetector;
 use Mpyw\UniqueViolationDetector\SQLServerDetector;
 use Mpyw\UniqueViolationDetector\UniqueViolationDetector as DetectorInterface;
 
-class UniqueViolationDetectorDiscoverer
+class DetectorDiscoverer
 {
     public function discover(ConnectionInterface $connection): DetectorInterface
     {
