@@ -1,0 +1,46 @@
+{
+    "name": "mpyw/laravel-unique-violation-detector",
+    "description": "Detect primary/unique key or constraint violation errors from PDOException.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mpyw",
+            "email": "ryosuke_i_628@yahoo.co.jp"
+        }
+    ],
+    "keywords": ["laravel", "illuminate", "database", "duplicate", "constraint"],
+    "autoload": {
+        "psr-4": {
+            "Mpyw\\LaravelUniqueViolationDetector\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mpyw\\LaravelUniqueViolationDetector\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "ext-pdo": "*",
+        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "illuminate/database": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "illuminate/contracts": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "mpyw/unique-violation-detector": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "*",
+        "orchestra/testbench-core": "^4.9 || ^5.9 || >=6.6",
+        "phpunit/phpunit": ">=9.5"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --testdox"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": ["Mpyw\\LaravelUniqueViolationDetector\\UniqueViolationDetectorServiceProvider"]
+        }
+    }
+}
