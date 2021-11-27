@@ -6,14 +6,19 @@ namespace Mpyw\LaravelUniqueViolationDetector\Tests;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Mpyw\LaravelUniqueViolationDetector\DetectorDiscoverer;
 use Mpyw\LaravelUniqueViolationDetector\Facades\Unique;
 use Mpyw\LaravelUniqueViolationDetector\Tests\Models\Post;
 use Mpyw\LaravelUniqueViolationDetector\Tests\Models\User;
 use Mpyw\LaravelUniqueViolationDetector\UniqueViolationDetector;
 use Mpyw\LaravelUniqueViolationDetector\UniqueViolationDetectorServiceProvider;
+use Mpyw\UniqueViolationDetector\MySQLDetector;
+use Mpyw\UniqueViolationDetector\SQLiteDetector;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use PDO;
 
 class Test extends BaseTestCase
 {
@@ -122,5 +127,39 @@ class Test extends BaseTestCase
             $this->assertFalse(Unique::forConnection(DB::connection())->violated($e));
             $this->assertFalse((new UniqueViolationDetector(DB::connection()))->violated($e));
         }
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testCustomClosureResolver(): void
+    {
+        $originalDetector = new class() extends SQLiteDetector {
+        };
+
+        Unique::resolverFor(SQLiteConnection::class, function () use ($originalDetector) {
+            return $originalDetector;
+        });
+
+        $discoveredDetector = (new DetectorDiscoverer())
+            ->discover(new SQLiteConnection(new PDO('sqlite::memory:')));
+
+        $this->assertTrue($discoveredDetector instanceof $originalDetector);
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testCustomStringResolver(): void
+    {
+        // Just for testing
+        Unique::resolverFor(SQLiteConnection::class, MySQLDetector::class);
+
+        $discoveredDetector = (new DetectorDiscoverer())
+            ->discover(new SQLiteConnection(new PDO('sqlite::memory:')));
+
+        $this->assertInstanceOf(MySQLDetector::class, $discoveredDetector);
     }
 }

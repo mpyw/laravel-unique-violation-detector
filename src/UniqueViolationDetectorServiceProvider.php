@@ -11,6 +11,7 @@ class UniqueViolationDetectorServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(Contracts\UniqueViolationDetector::class, UniqueViolationDetector::class);
+        $this->app->singleton(UniqueViolationDetector::class);
+        $this->app->alias(UniqueViolationDetector::class, Contracts\UniqueViolationDetector::class);
     }
 }

@@ -18,8 +18,29 @@ use Mpyw\UniqueViolationDetector\UniqueViolationDetector as DetectorInterface;
 
 class DetectorDiscoverer
 {
+    /**
+     * @var callable[]|string[]
+     */
+    protected static $resolvers = [];
+
+    /**
+     * @param string|callable $factory
+     * @phpstan-param class-string<ConnectionInterface> $connectionClassName
+     * @phpstan-param class-string<DetectorInterface>|callable(): DetectorInterface $factory
+     * @psalm-param class-string<ConnectionInterface> $connectionClassName
+     * @psalm-param class-string<DetectorInterface>|callable(): DetectorInterface $factory
+     */
+    public static function resolverFor(string $connectionClassName, $factory): void
+    {
+        static::$resolvers[$connectionClassName] = $factory;
+    }
+
     public function discover(ConnectionInterface $connection): DetectorInterface
     {
+        if ($factory = static::$resolvers[\get_class($connection)] ?? null) {
+            return \is_string($factory) ? new $factory() : $factory();
+        }
+
         if ($connection instanceof MySqlConnection) {
             return new MySQLDetector();
         }
