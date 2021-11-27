@@ -10,6 +10,20 @@ Detect **primary/unique key or constraint violation** errors from `PDOException`
 | Laravel | <code>^6.0 &#124;&#124; ^7.0 &#124;&#124; ^8.0 &#124;&#124; ^9.0</code> |
 | [mpyw/unique-violation-detector](https://github.com/mpyw/unique-violation-detector) | <code>^1.0</code> |
 
+## Supported Connections
+
+| Database | Connection Class |
+|:---|:---|
+| MySQL | `Illuminate\Database\MySqlConnection` |
+| PostgreSQL | `Illuminate\Database\PostgresConnection` |
+| SQLite | `Illuminate\Database\SQLiteConnection` |
+| SQLServer | `Illuminate\Database\SqlServerConnection` |
+
+You can also add custom resolvers by one of the following:
+
+- `Mpyw\LaravelUniqueViolationDetector\Facades\Unique::resolverFor()`
+- `Mpyw\LaravelUniqueViolationDetector\DetectorDiscoverer::resolverFor()`
+
 ## Installing
 
 ```

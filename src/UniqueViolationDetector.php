@@ -11,18 +11,26 @@ use PDOException;
 class UniqueViolationDetector implements Contracts\UniqueViolationDetector
 {
     /**
-     * @var DetectorInterface
+     * @var ConnectionInterface
      */
-    private $detector;
+    protected $connection;
+
+    /**
+     * @var null|DetectorInterface
+     */
+    protected $detector = null;
 
     public function __construct(ConnectionInterface $connection)
     {
-        $this->detector = (new DetectorDiscoverer())->discover($connection);
+        $this->connection = $connection;
     }
 
     public function violated(PDOException $e): bool
     {
-        return $this->detector->uniqueConstraintViolated($e);
+        return (
+            $this->detector
+            ?: ($this->detector = (new DetectorDiscoverer())->discover($this->connection))
+        )->uniqueConstraintViolated($e);
     }
 
     /**
