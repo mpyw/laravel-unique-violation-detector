@@ -9,7 +9,7 @@ use Mpyw\LaravelUniqueViolationDetector\Contracts;
 
 class UniqueViolationDetectorServiceProvider extends ServiceProvider
 {
-    public function boot(): void
+    public function register(): void
     {
         $this->app->bind(Contracts\UniqueViolationDetector::class, UniqueViolationDetector::class);
     }
