@@ -7,7 +7,7 @@ Detect **primary/unique key or constraint violation** errors from `PDOException`
 | Package | Version |
 |:---|:---|
 | PHP | <code>^7.3 &#124;&#124; ^8.0</code> |
-| Laravel | <code>^6.0 &#124;&#124; ^7.0 &#124;&#124; ^8.0 &#124;&#124; ^9.0</code> |
+| Laravel | <code>^6.0 &#124;&#124; ^7.0 &#124;&#124; ^8.0 &#124;&#124; ^9.0 &#124;&#124; ^10.0</code> |
 | [mpyw/unique-violation-detector](https://github.com/mpyw/unique-violation-detector) | <code>^1.0</code> |
 
 ## Supported Connections
