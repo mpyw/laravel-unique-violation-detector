@@ -22,7 +22,7 @@ jobs:
           --health-timeout=30s
           --health-retries=5
       postgres:
-        image: postgres:13.3
+        image: postgres:15
         ports:
           - '5432:5432'
         env:
@@ -47,19 +47,13 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.1, '8.0', 7.4, 7.3]
-        laravel: [^10.0, ^9.0, ^8.0, ^7.0, ^6.0]
+        php: [8.1, '8.0']
+        laravel: [^10.0, ^9.0]
         db: [mysql, pgsql, sqlite, sqlsrv, 'odbc:sqlsrv']
         exclude:
-          # ignore old Laravel for newer PHP
-          - { php: 8.1, laravel: ^7.0 }
-          - { php: 8.1, laravel: ^6.0 }
-          # ignore old PHP for newer Laravel
           - { php: 8.0, laravel: ^10.0 }
-          - { php: 7.4, laravel: ^10.0 }
-          - { php: 7.3, laravel: ^10.0 }
-          - { php: 7.4, laravel: ^9.0 }
-          - { php: 7.3, laravel: ^9.0 }
+          - { php: 8.0, laravel: ^11.0 }
+          - { php: 8.1, laravel: ^11.0 }
 
     steps:
       - uses: actions/checkout@v2
@@ -69,17 +63,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
-
-      - name: Set up MySQL
-        if: matrix.db == 'mysql'
-        run: |
-          mysql \
-            --host=127.0.0.1 \
-            --port=3306 \
-            --user=root \
-            --password=testing <<< "
-              ALTER USER 'testing'@'%' IDENTIFIED WITH mysql_native_password BY 'testing';
-            "
 
       - name: Set up SQLServer
         if: matrix.db == 'sqlsrv' || matrix.db == 'odbc:sqlsrv'
