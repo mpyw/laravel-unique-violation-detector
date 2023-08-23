@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Mpyw\LaravelUniqueViolationDetector\Tests;
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\Connectors\SqlServerConnector;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\SQLiteConnection;
@@ -39,6 +41,19 @@ class Test extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // https://github.com/laravel/framework/issues/47937#issuecomment-1678200201
+        $this->app->instance(
+            'db.connector.sqlsrv',
+            new class() extends SqlServerConnector {
+                protected $options = [
+                    PDO::ATTR_CASE => PDO::CASE_NATURAL,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+                    PDO::SQLSRV_ATTR_FETCHES_NUMERIC_TYPE => true,
+                ];
+            },
+        );
 
         config(['database.connections' => require __DIR__ . '/config/database.php']);
         config(['database.default' => getenv('DB') ?: 'sqlite']);
