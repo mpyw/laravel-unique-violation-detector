@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mpyw\LaravelUniqueViolationDetector;
 
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Mpyw\UniqueViolationDetector\UniqueViolationDetector as DetectorInterface;
 use PDOException;
 
@@ -27,6 +28,10 @@ class UniqueViolationDetector implements Contracts\UniqueViolationDetector
 
     public function violated(PDOException $e): bool
     {
+        if ($e instanceof UniqueConstraintViolationException) {
+            return true;
+        }
+
         return (
             $this->detector
             ?: ($this->detector = (new DetectorDiscoverer())->discover($this->connection))
