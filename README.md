@@ -1,5 +1,7 @@
 # Laravel Unique Violation Detector [![Build Status](https://github.com/mpyw/laravel-unique-violation-detector/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mpyw/laravel-unique-violation-detector/actions) [![Coverage Status](https://coveralls.io/repos/github/mpyw/laravel-unique-violation-detector/badge.svg?branch=master)](https://coveralls.io/github/mpyw/laravel-unique-violation-detector?branch=master)
 
+**ABANDONED: The functionalities of this library have been integrated into the Laravel core due to changes in Laravel [v10.20.0](https://github.com/laravel/framework/releases/tag/v10.20.0). <ins>From now on, the `Illuminate\Database\UniqueConstraintViolationException` exception class will be thrown when there is a unique constraint violation, so there is no need to use this library for judgment</ins>. Simply checking with `catch` or `instanceof` should be sufficient. Although the internal judgment logic is strictly different in some parts, it should be replaceable without any problems in most cases.**
+
 Detect **primary/unique key or constraint violation** errors from `PDOException`.
 
 ## Requirements
